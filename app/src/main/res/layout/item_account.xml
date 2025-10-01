@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvAccountName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bank Account"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/tvAccountBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*****"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_toStartOf="@id/ivAccountArrow"
+            android:layout_marginEnd="8dp"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/ivAccountArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/next_button"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            app:tint="@android:color/darker_gray"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
