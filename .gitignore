@@ -14,4 +14,4 @@
 .cxx
 local.properties
 
-/.app/src/main/java/com/example/cashflowpro/data/api/RetrofitClient.kt
+app/src/main/java/com/example/cashflowpro/data/api/RetrofitClient.kt
