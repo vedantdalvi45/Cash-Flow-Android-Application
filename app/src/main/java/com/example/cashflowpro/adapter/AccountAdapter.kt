@@ -7,8 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashflowpro.R
-import com.example.cashflowpro.model.PaymentMode
-import com.example.cashflowpro.model.Transaction
+import com.example.cashflowpro.data.model.PaymentMode
 
 class AccountAdapter(private val accountList: List<PaymentMode>) :
     RecyclerView.Adapter<AccountAdapter.AccountViewHolder>() {
