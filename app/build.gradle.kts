@@ -47,8 +47,16 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Gson converter
 
+    // OkHttp Logging Interceptor for debugging network calls
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
     // For EncryptedSharedPreferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    //jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
