@@ -1,4 +1,4 @@
-package com.example.cashflowpro.navfragments
+package com.example.cashflowpro.ui.fragments.navfragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
