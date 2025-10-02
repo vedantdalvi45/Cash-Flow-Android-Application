@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cashflowpro.databinding.ListItemTransactionBinding
-import com.example.cashflowpro.model.Transaction
+import com.example.cashflowpro.data.model.Transaction
 import java.text.SimpleDateFormat
 import java.util.Locale
 

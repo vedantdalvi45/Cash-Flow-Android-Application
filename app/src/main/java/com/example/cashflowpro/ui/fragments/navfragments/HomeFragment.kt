@@ -1,4 +1,4 @@
-package com.example.cashflowpro.navfragments
+package com.example.cashflowpro.ui.fragments.navfragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,16 +8,13 @@ import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
+import android.widget.TextView
 import com.example.cashflowpro.R
 import com.example.cashflowpro.adapter.TransactionAdapter
 import com.example.cashflowpro.databinding.FragmentHomeBinding
-import com.example.cashflowpro.model.Category
-import com.example.cashflowpro.model.PaymentMode
-import com.example.cashflowpro.model.Transaction
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.cashflowpro.data.model.Category
+import com.example.cashflowpro.data.model.PaymentMode
+import com.example.cashflowpro.data.model.Transaction
 import java.util.concurrent.TimeUnit
 class HomeFragment : Fragment() {
 
@@ -38,7 +35,7 @@ class HomeFragment : Fragment() {
         val adapter = object : ArrayAdapter<String>(requireContext(), R.layout.custom_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                (view.findViewById<android.widget.TextView>(android.R.id.text1))?.text = ""
+                (view.findViewById<TextView>(android.R.id.text1))?.text = ""
 
                 return view
             }

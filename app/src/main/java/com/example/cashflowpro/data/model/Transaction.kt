@@ -1,4 +1,4 @@
-package com.example.cashflowpro.model
+package com.example.cashflowpro.data.model
 
 import java.util.Date
 

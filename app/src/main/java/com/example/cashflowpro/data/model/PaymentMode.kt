@@ -1,4 +1,4 @@
-package com.example.cashflowpro.model
+package com.example.cashflowpro.data.model
 
 data class PaymentMode(
     val paymentType: String,
