@@ -37,9 +37,19 @@ android {
     viewBinding{
         enable = true
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
+    // Retrofit for networking
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0") // Gson converter
+
+    // For EncryptedSharedPreferences
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
