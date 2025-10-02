@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="20dp"
     android:background="#F5F5F5"
-    tools:context=".navfragments.AccountsFragment">
+    tools:context=".ui.fragments.navfragments.AccountsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".navfragments.AnalysisFragment">
+    tools:context=".ui.fragments.navfragments.AnalysisFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
