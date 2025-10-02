@@ -9,12 +9,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.cashflowpro.databinding.ActivityMainBinding
-import com.example.cashflowpro.navfragments.AccountsFragment
-import com.example.cashflowpro.navfragments.AnalysisFragment
-import com.example.cashflowpro.navfragments.HomeFragment
-import com.example.cashflowpro.navfragments.MoreFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.cashflowpro.ui.fragments.navfragments.AccountsFragment
+import com.example.cashflowpro.ui.fragments.navfragments.AnalysisFragment
+import com.example.cashflowpro.ui.fragments.navfragments.HomeFragment
+import com.example.cashflowpro.ui.fragments.navfragments.MoreFragment
 
 class MainActivity : AppCompatActivity() {
 
