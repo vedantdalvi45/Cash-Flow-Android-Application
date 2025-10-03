@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
     <FrameLayout
@@ -18,9 +19,12 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
+        android:background="?attr/colorPrimary"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_menu">
+
+        app:itemIconTint="@color/bottom_nav_item_color"
+        app:itemTextColor="@color/bottom_nav_item_color"
+        app:menu="@menu/bottom_nav_menu" >
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_transaction_button"

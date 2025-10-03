@@ -4,4 +4,27 @@
     <color name="white">#FFFFFFFF</color>
     <color name="placeholder_bg">#DDDDDD</color>
     <color name="placeholder_bg_darker">#CCCCCC</color>
+
+
+    <color name="light_primary">#006A6A</color>
+    <color name="light_onPrimary">#FFFFFF</color>
+    <color name="light_primaryContainer">#A1F1F0</color>
+    <color name="light_onPrimaryContainer">#002020</color>
+    <color name="light_secondary">#7E5700</color>
+    <color name="light_onSecondary">#FFFFFF</color>
+    <color name="light_surface">#FAFDFF</color>
+    <color name="light_onSurface">#191C1C</color>
+    <color name="light_background">#FAFDFF</color>
+
+    <color name="dark_primary">#53DBDA</color>
+    <color name="dark_onPrimary">#191919</color>
+    <color name="dark_primaryContainer">#005050</color>
+    <color name="dark_onPrimaryContainer">#A1F1F0</color>
+    <color name="dark_secondary">#FFBA3B</color>
+    <color name="dark_onSecondary">#422D00</color>
+    <color name="dark_surface">#191C1C</color>
+    <color name="dark_onSurface">#E1E3E3</color>
+    <color name="dark_background">#191C1C</color>
+
+
 </resources>
