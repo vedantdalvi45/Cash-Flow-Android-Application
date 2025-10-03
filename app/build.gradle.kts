@@ -70,6 +70,9 @@ dependencies {
 
     implementation("com.google.android.flexbox:flexbox:3.0.0")
 
+    //Biometrics
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
