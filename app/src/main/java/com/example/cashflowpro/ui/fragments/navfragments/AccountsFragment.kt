@@ -1,68 +1,216 @@
 package com.example.cashflowpro.ui.fragments.navfragments
 
+import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.cashflowpro.adapter.AccountAdapter
-import com.example.cashflowpro.R
+import com.example.cashflowpro.adapter.PaymentModeAdapter
 import com.example.cashflowpro.data.model.PaymentMode
+import com.example.cashflowpro.databinding.FragmentAccountsBinding
+import com.example.cashflowpro.ui.accounts.PaymentModeViewModel
+import com.example.cashflowpro.util.PaymentModeStorage
+import com.example.cashflowpro.util.Resource
+import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.Executor
 
+const val TAG = "AccountsFragment"
 
+@AndroidEntryPoint
 class AccountsFragment : Fragment() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var accountAdapter: AccountAdapter
-    private lateinit var accountList: ArrayList<PaymentMode>
+    private var _binding: FragmentAccountsBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var addAccountTextView: TextView
-    private lateinit var accountsCountTV: TextView
+    private val viewModel: PaymentModeViewModel by viewModels()
 
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var paymentModeAdapterForBank: PaymentModeAdapter
+    private lateinit var paymentModeAdapterForCash: PaymentModeAdapter
+
+    private val paymentModeListGlobal = mutableListOf<PaymentMode>()
+
+    private lateinit var executor: Executor
+    private lateinit var biometricPrompt: BiometricPrompt
+    private lateinit var promptInfo: BiometricPrompt.PromptInfo
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_accounts, container, false)
+    ): View {
+        _binding = FragmentAccountsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.accountsRecyclerView)
-        linearLayoutManager = LinearLayoutManager(context)
-        recyclerView.layoutManager = linearLayoutManager
+        setupRecyclerViewForBank()
+        setupRecyclerViewForCash()
+        observePaymentModes()
 
-        addAccountTextView = view.findViewById(R.id.tvAddAccount)
-        accountsCountTV = view.findViewById<TextView>(R.id.accounts_count)
+        val savedPaymentModes = PaymentModeStorage.loadPaymentModes(requireContext())
+        if (savedPaymentModes.isNotEmpty()) {
+            paymentModeListGlobal.clear()
+            paymentModeListGlobal.addAll(savedPaymentModes)
+            paymentModeAdapterForBank.submitList(paymentModeListGlobal.filter { it.paymentType == "BANK" }
+                .map { it.copy(balance = -1.0) })
+            paymentModeAdapterForCash.submitList(paymentModeListGlobal.filter { it.paymentType == "CASH" }
+                .map { it.copy(balance = -1.0) })
+            // Update counts when loading from storage
+            binding.accountsCountB.text =
+                paymentModeListGlobal.count { it.paymentType == "BANK" }.toString()
+            binding.accountsCountC.text =
+                paymentModeListGlobal.count { it.paymentType == "CASH" }.toString()
 
-        accountList = ArrayList()
-        prepareAccountListData()
 
-        accountAdapter = AccountAdapter(accountList)
-        recyclerView.adapter = accountAdapter
+            binding.accountsRecyclerViewForBank.visibility = View.VISIBLE
+            binding.accountsRecyclerViewForCash.visibility = View.VISIBLE
+        }
 
-        addAccount()
+        viewModel.fetchPaymentModes()
+
+        setupBiometrics()
+
+        binding.balanceToggle.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                authenticate()
+            } else {
+                updateBalanceVisibility(isVisible = false)
+            }
+        }
     }
 
-
-    private fun prepareAccountListData() {
-        val hdfc_bank = PaymentMode( "Bank", "HDFC Bank", 50250.50)
-        val sbi_bank = PaymentMode( "Bank", "SBI Bank", 75000.00)
-        val shop_cash = PaymentMode( "Cash", "Shop Cash", 2500.00)
-        accountList.addAll(listOf(hdfc_bank, sbi_bank))
-        accountsCountTV.text = accountList.size.toString()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
-    private fun addAccount() {
-        addAccountTextView.setOnClickListener {
+    private fun setupRecyclerViewForBank() {
+        paymentModeAdapterForBank = PaymentModeAdapter() // Initialize the adapter
+        binding.accountsRecyclerViewForBank.apply {
+            adapter = paymentModeAdapterForBank
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
 
+    private fun setupRecyclerViewForCash() {
+        paymentModeAdapterForCash = PaymentModeAdapter() // Initialize the adapter
+        binding.accountsRecyclerViewForCash.apply {
+            adapter = paymentModeAdapterForCash
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun observePaymentModes() {
+        viewModel.paymentModes.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    Log.d(TAG, "observePaymentModes: Loading...")
+                    // 4. Handle loading UI state
+                }
+
+                is Resource.Success -> {
+                    if (!PaymentModeStorage.areListsEqual(resource.data!!, paymentModeListGlobal)) {
+                        Log.d(
+                            TAG,
+                            "observePaymentModes: New data detected. Updating UI and storage."
+                        )
+                        paymentModeListGlobal.clear()
+                        paymentModeListGlobal.addAll(resource.data)
+                        PaymentModeStorage.savePaymentModes(requireContext(), resource.data)
+
+                        paymentModeAdapterForBank.submitList(paymentModeListGlobal.filter { it.paymentType == "BANK" }
+                            .map { it.copy(balance = -1.0) })
+                        paymentModeAdapterForCash.submitList(paymentModeListGlobal.filter { it.paymentType == "CASH" }
+                            .map { it.copy(balance = -1.0) })
+
+                    } else
+                        Log.d(
+                            TAG, "observePaymentModes: No changes detected. Skipping update. " +
+                                "${paymentModeListGlobal.filter { it.paymentType == "BANK" }}"
+                        )
+
+                    binding.accountsCountB.text =
+                        paymentModeListGlobal.filter { it.paymentType == "BANK" }.size.toString()
+                    binding.accountsCountC.text =
+                        paymentModeListGlobal.filter { it.paymentType == "CASH" }.size.toString()
+
+
+                }
+
+                is Resource.Error -> {
+                    Log.d(TAG, "observePaymentModes: Error - ${resource.message}")
+                    // Optionally show an error message TextView
+                }
+            }
+        }
+    }
+
+    private fun setupBiometrics() {
+        executor = ContextCompat.getMainExecutor(requireContext())
+
+        val callback = object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                handleAuthenticationResult(success = true)
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                Toast.makeText(context, "Authentication error: $errString", Toast.LENGTH_SHORT)
+                    .show()
+                handleAuthenticationResult(success = false)
+            }
+        }
+
+        biometricPrompt = BiometricPrompt(this, executor, callback)
+
+        promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Authentication Required")
+            .setSubtitle("Confirm your identity to view the balance")
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+            .build()
+    }
+
+    private fun authenticate() {
+        val biometricManager = BiometricManager.from(requireContext())
+        if (biometricManager.canAuthenticate(BIOMETRIC_STRONG or BiometricManager.Authenticators.DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
+            biometricPrompt.authenticate(promptInfo)
+        } else {
+            Toast.makeText(context, "No screen lock or fingerprint is set up.", Toast.LENGTH_SHORT)
+                .show()
+            handleAuthenticationResult(success = false)
+        }
+    }
+
+    private fun handleAuthenticationResult(success: Boolean) {
+        if (success && binding.balanceToggle.isChecked) {
+            updateBalanceVisibility(isVisible = true)
+        } else {
+            binding.balanceToggle.isChecked = false
+            updateBalanceVisibility(isVisible = false)
+        }
+    }
+
+    private fun updateBalanceVisibility(isVisible: Boolean) {
+        if (isVisible) {
+            binding.balanceTextView.text = "₹${paymentModeListGlobal.sumOf { it.balance }}"
+            paymentModeAdapterForBank.submitList(paymentModeListGlobal.filter { it.paymentType == "BANK" }
+                .map { it.copy() })
+            paymentModeAdapterForCash.submitList(paymentModeListGlobal.filter { it.paymentType == "CASH" }
+                .map { it.copy() })
+        } else {
+            binding.balanceTextView.text = "*****"
+            paymentModeAdapterForBank.submitList(paymentModeListGlobal.filter { it.paymentType == "BANK" }
+                .map { it.copy(balance = -1.0) })
+            paymentModeAdapterForCash.submitList(paymentModeListGlobal.filter { it.paymentType == "CASH" }
+                .map { it.copy(balance = -1.0) })
         }
     }
 }
-
-

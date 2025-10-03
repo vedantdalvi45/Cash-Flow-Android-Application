@@ -1,6 +1,7 @@
 package com.example.cashflowpro.data.api
 
 import com.example.cashflowpro.data.model.Category
+import com.example.cashflowpro.data.model.PaymentMode
 import com.example.cashflowpro.data.model.auth.GenericResponse
 import com.example.cashflowpro.data.model.auth.LoginRequest
 import com.example.cashflowpro.data.model.auth.LoginResponse
@@ -23,5 +24,10 @@ interface ApiService {
     suspend fun getAllCategories(
         @Header("Authorization") token: String
     ): Response<List<Category>>
+
+    @GET("payment-modes")
+    suspend fun getPaymentModes(
+        @Header("Authorization") token: String
+    ): Response<List<PaymentMode>>
 
 }

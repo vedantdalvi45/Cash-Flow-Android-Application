@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:background="#F5F5F5"
+    android:background="?attr/colorPrimary"
+
     tools:context=".ui.fragments.navfragments.AccountsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -24,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All Accounts"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,39 +74,45 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
             android:layout_marginBottom="16dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Transactions based balance, actual may vary."
                 android:textSize="8sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/tvShowBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Show balance"
                 android:textSize="10sp"
-                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/switchShowBalance"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintVertical_bias="1.0" />
 
             <Switch
-                android:id="@+id/switchShowBalance"
+                android:id="@+id/balanceToggle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:ignore="UseSwitchCompatOrMaterialXml"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -147,6 +154,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/balanceTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="*****"
@@ -227,7 +235,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/accounts_count"
+                android:id="@+id/accounts_count_B"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -238,16 +246,17 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/accountsRecyclerView"
+            android:id="@+id/accountsRecyclerViewForBank"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:listitem="@layout/item_account" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp">
 
             <ImageView
@@ -263,49 +272,23 @@
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
+            <TextView
+                android:id="@+id/accounts_count_C"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:text="0"/>
+
         </LinearLayout>
 
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/accountsRecyclerViewForCash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cash"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"/>
-
-                <TextView
-                    android:id="@+id/tvCashBalance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="*****"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"
-                    android:layout_toStartOf="@id/ivCashArrow"
-                    android:layout_marginEnd="8dp"
-                    android:layout_centerVertical="true"/>
-
-                <ImageView
-                    android:id="@+id/ivCashArrow"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/next_button"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    app:tint="@android:color/darker_gray"/>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+            tools:listitem="@layout/item_account" />
 
     </LinearLayout>
 </ScrollView>
