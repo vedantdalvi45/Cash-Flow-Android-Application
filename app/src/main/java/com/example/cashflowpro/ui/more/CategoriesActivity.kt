@@ -72,10 +72,11 @@ class CategoriesActivity : AppCompatActivity() {
                 is Resource.Success -> {
                     resource.data?.let { newList ->
                         if (!CategoryStorage.areListsEqual(newList, categoryListGlobal)) {
-                            Log.d(TAG, "New data detected. Updating UI and storage.")
                             categoryListGlobal.clear()
                             categoryListGlobal.addAll(newList)
+                            CategoryStorage.clearCategories(this)
                             CategoryStorage.saveCategories(this, newList)
+                            Log.d(TAG, "Categories saved to storage. $categoryListGlobal")
                             updateResultText(binding.toggleButtonGroup.checkedButtonId)
                         } else {
                             Log.d(TAG, "No changes detected. Skipping update.")

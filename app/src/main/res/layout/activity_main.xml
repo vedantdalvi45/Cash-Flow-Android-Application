@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="?attr/colorPrimary"
+    android:background="?attr/colorOnSurface"
     android:orientation="vertical">
 
     <FrameLayout
@@ -19,7 +19,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="#00785F5F"
         app:labelVisibilityMode="labeled"
 
         app:itemIconTint="@color/bottom_nav_item_color"

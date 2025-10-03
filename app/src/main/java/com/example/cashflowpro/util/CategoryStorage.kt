@@ -29,6 +29,11 @@ object CategoryStorage {
         }
     }
 
+    fun clearCategories(context: Context) {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        prefs.edit().remove(KEY_CATEGORIES).apply()
+    }
+
     fun areListsEqual(list1: List<Category>, list2: List<Category>): Boolean {
         return list1.sortedBy { it.id } == list2.sortedBy { it.id }
     }

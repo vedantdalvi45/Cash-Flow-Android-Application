@@ -5,21 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
+    android:background="?attr/colorOnSurface"
     tools:context=".ui.more.CategoriesActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:liftOnScroll="true">
+        app:liftOnScroll="true"
+        android:background="?attr/colorOnPrimaryContainer">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/categories_menu"
-            app:navigationIcon="@drawable/arrow"
+            app:navigationIcon="@drawable/ic_back_arrow"
             app:title="Categories" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -48,6 +49,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="?attr/colorSurface"
                     android:text="Expense" />
 
                 <Button
@@ -56,6 +58,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="?attr/colorSurface"
                     android:text="Income" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -66,7 +69,7 @@
                 android:layout_marginTop="24dp"
                 android:text="Default Category"
                 android:textAppearance="?attr/textAppearanceLabelMedium"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:textColor="?attr/colorSurface" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -83,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Others"
+                    android:textColor="?attr/colorSurface"
                     android:textAppearance="?attr/textAppearanceBodyLarge" />
 
                 <ImageView
@@ -114,7 +118,8 @@
                     android:id="@+id/tv_edit_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Edit order" />
+                    android:text="Edit order"
+                    android:textColor="?attr/colorSurface"/>
             </LinearLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout

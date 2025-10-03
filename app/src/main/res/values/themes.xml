@@ -12,6 +12,10 @@
         <item name="android:colorBackground">@color/dark_background</item>
         <item name="colorSurface">@color/dark_surface</item>
         <item name="colorOnSurface">@color/dark_onSurface</item>
+        <item name="colorOutline">@color/dark_outline</item>
+        <item name="colorError">@color/dark_error</item>
+        <item name="colorOnError">@color/dark_onError</item>
+
 
 
     </style>
@@ -26,5 +30,9 @@
         <item name="android:colorBackground">@color/dark_background</item>
         <item name="colorSurface">@color/dark_surface</item>
         <item name="colorOnSurface">#D2E2E2</item>
+        <item name="colorOutline">@color/dark_outline</item>
+        <item name="colorError">@color/dark_error</item>
+        <item name="colorOnError">@color/dark_onError</item>
+
     </style>
 </resources>

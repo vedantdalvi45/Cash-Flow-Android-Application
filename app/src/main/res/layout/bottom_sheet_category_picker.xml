@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="?attr/colorOnPrimaryContainer"
     android:padding="16dp">
 
     <!-- Toolbar -->
@@ -18,6 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="?attr/colorPrimaryContainer"
             android:text="Select Category" />
 
         <ImageView
@@ -42,7 +44,7 @@
             android:layout_height="22dp"
             android:layout_marginStart="22dp"
             android:src="@drawable/ic_close"
-  />
+            app:tint="?attr/colorPrimaryContainer" />
     </LinearLayout>
 
     <!-- Grid/List of Categories -->

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.example.cashflowpro.databinding.ActivityAddTransactionBinding
 import com.example.cashflowpro.ui.transactions.CategoryPickerBottomSheet
+import com.example.cashflowpro.ui.transactions.PaymentModePickerBottomSheet
 import com.example.cashflowpro.util.CategoryStorage
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -28,13 +29,20 @@ class AddTransactionActivity : AppCompatActivity() {
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        binding.backArrowImage.setOnClickListener {
-            startActivity(Intent(this@AddTransactionActivity, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            })
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
         }
+
         manipulateCalender()
         manipulateTransactionTabs()
+        binding.layoutCategory.setOnClickListener {
+            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "EXPENSE" })
+            sheet.show(supportFragmentManager, "CategoryPicker")
+        }
+        binding.layoutPaymentMode.setOnClickListener {
+            val sheet = PaymentModePickerBottomSheet()
+            sheet.show(supportFragmentManager, "PaymentModePicker")
+        }
     }
     private fun manipulateCalender(){
         binding.textViewDate.text = dateFormat.format(calendar.time)
@@ -104,6 +112,9 @@ class AddTransactionActivity : AppCompatActivity() {
                         binding.categoryIcon.setImageResource(R.drawable.money)
                         binding.paymentModeLabel.text = "To"
                         binding.textViewPaymentModeValue.text = "Cash"
+                        binding.layoutCategory.setOnClickListener {
+
+                        }
                     }
                 }
             }
