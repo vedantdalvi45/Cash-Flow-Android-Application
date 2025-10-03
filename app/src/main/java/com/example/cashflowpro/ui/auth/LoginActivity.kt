@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
 
         sessionManager = SessionManager(this.applicationContext)
 
+//        sessionManager.clearAuthToken()
         // If a token already exists, go to MainActivity
         val token = sessionManager.fetchAuthToken()
 
