@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.example.cashflowpro.databinding.ActivityAddTransactionBinding
+import com.example.cashflowpro.ui.transactions.CategoryPickerBottomSheet
+import com.example.cashflowpro.util.CategoryStorage
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -31,7 +33,6 @@ class AddTransactionActivity : AppCompatActivity() {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             })
         }
-
         manipulateCalender()
         manipulateTransactionTabs()
     }
@@ -81,6 +82,10 @@ class AddTransactionActivity : AppCompatActivity() {
                         binding.categoryIcon.setImageResource(R.drawable.icon_category)
                         binding.paymentModeLabel.text = "Payment Mode"
                         binding.textViewPaymentModeValue.text = "Cash"
+                        binding.layoutCategory.setOnClickListener {
+                            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "EXPENSE" })
+                            sheet.show(supportFragmentManager, "CategoryPicker")
+                        }
                     }
                     R.id.button_income -> { /* Handle Income selection */
                         binding.textViewCategoryLabel.text = "Category"
@@ -88,6 +93,10 @@ class AddTransactionActivity : AppCompatActivity() {
                         binding.categoryIcon.setImageResource(R.drawable.icon_category)
                         binding.paymentModeLabel.text = "Payment Mode"
                         binding.textViewPaymentModeValue.text = "Cash"
+                        binding.layoutCategory.setOnClickListener {
+                            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "INCOME" })
+                            sheet.show(supportFragmentManager, "CategoryPicker")
+                        }
                     }
                     R.id.button_transfer -> { /* Handle Transfer selection */
                         binding.textViewCategoryLabel.text = "From"
