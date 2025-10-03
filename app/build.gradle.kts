@@ -68,6 +68,8 @@ dependencies {
     // build.gradle.kts
     implementation("com.facebook.shimmer:shimmer:0.5.0")
 
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
