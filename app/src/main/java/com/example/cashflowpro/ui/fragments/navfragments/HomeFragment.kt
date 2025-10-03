@@ -70,78 +70,11 @@ class HomeFragment : Fragment() {
             adapter =  transactionAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        addTransactions()
+//        addTransactions()
         transactionAdapter.submitList(transactions)
 
     }
 
-    private fun addTransactions() {
-        val hdfc_bank = PaymentMode( "Bank", "HDFC Bank", 50250.50)
-        val sbi_bank = PaymentMode( "Bank", "SBI Bank", 75000.00)
-        val shop_cash = PaymentMode( "Cash", "Shop Cash", 2500.00)
-
-        val catShopping = Category(name = "Shopping", iconResId = R.drawable.analytics, categoryType = "Expense")
-        val catTravel = Category(name = "Travel", iconResId = R.drawable.money, categoryType = "Expense")
-        val catBills = Category(name = "Bills", iconResId = R.drawable.analytics, categoryType = "Expense")
-        val catSalary = Category(name = "Salary", iconResId = R.drawable.money, categoryType = "Income")
-        val catFreelance = Category(name = "Freelance", iconResId = R.drawable.bank, categoryType = "Income")
-        val catTransfer = Category(name = "Transfer", iconResId = R.drawable.arrow, categoryType = "Transfer")
-        transactions.addAll(listOf(
-            Transaction(
-                id = 1,
-                amount = "250.00",
-                description = "Lunch with colleagues",
-                timestamp = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1),
-                category = catShopping,
-                paymentMethod = hdfc_bank,
-                balance = 50250.50,
-                transactionType = "Expense",
-                tags = listOf("food", "office", "lunch"),
-                attachment = ""
-            ),
-            // Income Transaction
-            Transaction(
-                id = 2,
-                amount = "65000.00",
-                description = "September Salary",
-                timestamp = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(2), // 2 days ago
-                category = catSalary,
-                paymentMethod = hdfc_bank,
-                balance = 50500.50, // Balance before the lunch expense above
-                transactionType = "Income",
-                tags = listOf("salary", "monthly"),
-                attachment = "/path/to/payslip.pdf"
-            ),
-            // Shopping Expense Transaction
-            Transaction(
-                id = 3,
-                amount = "3499.00",
-                description = "New headphones",
-                timestamp = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(3), // 3 days ago
-                category = catShopping,
-                paymentMethod = sbi_bank,
-                balance = 75000.00,
-                transactionType = "Expense",
-                tags = listOf("electronics", "gadget"),
-                attachment = "/path/to/invoice.jpg"
-            ),
-            // Transfer Transaction
-            Transaction(
-                id = 4,
-                amount = "5000.00",
-                description = "Moved to SBI account",
-                timestamp = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(5), // 5 hours ago
-                category = catTransfer,
-                paymentMethod = hdfc_bank,
-                balance = 45250.50,
-                transactionType = "Transfer",
-                tags = listOf("self", "bank transfer"),
-                attachment = ""
-            )
-
-        ))
-
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
