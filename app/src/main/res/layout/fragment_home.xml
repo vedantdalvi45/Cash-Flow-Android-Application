@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorOnSurface"
@@ -11,15 +10,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="10dp"
-            android:gravity="center_vertical">
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -32,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Good Afternoon"
-                    android:textColor="#464646"
+                    android:textColor="?attr/colorSurface"
                     android:textSize="16sp" />
 
                 <TextView
@@ -40,6 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Guest User"
+                    android:textColor="?attr/colorSurface"
                     android:textSize="24sp" />
 
             </LinearLayout>
@@ -49,8 +49,8 @@
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:contentDescription="profile"
-                android:src="@drawable/profile"/>
-            </LinearLayout>
+                android:src="@drawable/profile" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,31 +60,33 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:padding="5dp">
 
                 <TextView
                     android:id="@+id/month_selector_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawablePadding="8dp"
                     android:width="130dp"
+                    android:drawablePadding="8dp"
+                    android:textColor="?attr/colorSurface"
                     android:text="This month"
                     android:textSize="20sp" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/options_spinner"
+                    style="@style/Widget.AppCompat.Spinner.DropDown"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_margin="5dp"
                     android:background="@drawable/spinner_background"
-                    android:popupBackground="@drawable/curved_dropdown_background"
                     android:layoutMode="clipBounds"
-                    android:spinnerMode="dropdown"
-                    style="@style/Widget.AppCompat.Spinner.DropDown"
-                    android:layout_margin="5dp"/>
+                    android:backgroundTintMode="screen"
+                    android:popupBackground="@drawable/curved_dropdown_background"
+                    android:spinnerMode="dropdown" />
 
                 <View
                     android:layout_width="0dp"
@@ -95,17 +97,18 @@
                     android:id="@+id/search_icon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
+                    android:layout_margin="5dp"
                     android:contentDescription="Search"
                     android:src="@drawable/search"
-                    android:layout_margin="5dp"/>
+                    app:tint="?attr/colorSurface" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/cards_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="10dp">
+                android:layout_marginHorizontal="10dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -126,21 +129,21 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Spending"
-
+                            android:textColor="?attr/colorSurface"
                             android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="₹240.0"
-
+                            android:textColor="?attr/colorSurface"
                             android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -165,21 +168,21 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="10dp">
+                        android:layout_marginLeft="10dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Income"
-
+                            android:textColor="?attr/colorSurface"
                             android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="₹35,020"
-
+                            android:textColor="?attr/colorSurface"
                             android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -187,6 +190,7 @@
             </LinearLayout>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/balance_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -198,6 +202,7 @@
                 android:paddingEnd="24dp"
                 android:paddingBottom="12dp"
                 android:text="Balance: 34,780"
+                android:textColor="?attr/colorSurface"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -210,21 +215,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recent transactions"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:text="Recent transactions"
+                android:textColor="?attr/colorSurface"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="See all"
-                android:textColor="#5E5E5E"
-                android:textSize="14sp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:text="See all"
+                android:textColor="?attr/colorSurface"
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -16,4 +16,25 @@
         <item name="colorOnError">@color/light_onError</item>
 
     </style>
+
+    <style name="CustomDatePickerDialog" parent="ThemeOverlay.Material3.MaterialCalendar">
+
+        <item name="colorPrimary">@color/date_picker_header_bg</item>
+
+        <item name="colorOnPrimary">@color/date_picker_header_text</item>
+
+        <item name="colorSurface">@color/date_picker_dialog_bg</item>
+
+        <item name="colorOnSurfaceVariant">@color/date_picker_accent</item>
+
+        <item name="colorSecondary">@color/date_picker_header_bg</item>
+        <item name="colorOnSecondary">@color/date_picker_header_text</item>
+
+        <item name="buttonBarPositiveButtonStyle">@style/CustomDatePickerDialog.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/CustomDatePickerDialog.Button</item>
+    </style>
+
+    <style name="CustomDatePickerDialog.Button" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/date_picker_header_bg</item>
+    </style>
 </resources>
