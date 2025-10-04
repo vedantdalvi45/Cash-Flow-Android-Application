@@ -1,25 +1,24 @@
 package com.example.cashflowpro.ui.fragments.navfragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cashflowpro.R
 import com.example.cashflowpro.adapter.TransactionAdapter
 import com.example.cashflowpro.databinding.FragmentHomeBinding
-import com.example.cashflowpro.data.model.Category
-import com.example.cashflowpro.data.model.PaymentMode
-import com.example.cashflowpro.data.model.Transaction
-import java.util.concurrent.TimeUnit
-class HomeFragment : Fragment() {
+import com.example.cashflowpro.util.TransactionStorage
 
+
+class HomeFragment : Fragment() {
+    val TAG: String = "HomeFragment"
     private lateinit var transactionAdapter: TransactionAdapter
-    private lateinit var transactions: MutableList<Transaction>
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -60,19 +59,19 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recentTransactions()
+
     }
 
     private fun recentTransactions() {
-        transactions = ArrayList()
 
         binding.transactionsRecyclerView.apply {
             transactionAdapter = TransactionAdapter()
             adapter =  transactionAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-//        addTransactions()
-        transactionAdapter.submitList(transactions)
-
+        Log.d(TAG, "recentTransactions: ${TransactionStorage.loadTransactions(requireContext())}")
+        var list = TransactionStorage.loadTransactions(requireContext()).toMutableList()
+        transactionAdapter.submitList(list)
     }
 
 
