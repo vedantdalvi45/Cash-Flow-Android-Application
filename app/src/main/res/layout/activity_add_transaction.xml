@@ -138,7 +138,7 @@
                     android:textSize="34sp"
                     android:background="@android:color/transparent"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorSurface"
                     android:textColorHint="?attr/colorOnSurfaceVariant"
                     android:importantForAutofill="no" />
 

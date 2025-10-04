@@ -10,8 +10,8 @@
 
     <item
         android:drawable="@drawable/down"
-        android:height="20dp"
-        android:width="20dp"
+        android:height="32dp"
+        android:width="38dp"
         android:gravity="center" />
 
 </layer-list>

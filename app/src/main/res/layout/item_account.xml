@@ -11,6 +11,7 @@
     android:layout_marginBottom="4dp">
 
     <RelativeLayout
+        android:id="@+id/payment_mode_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">

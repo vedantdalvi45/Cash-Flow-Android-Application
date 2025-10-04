@@ -28,13 +28,15 @@
             android:textSize="16sp" />
 
         <ImageView
+            android:id="@+id/edit_payment_mode"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/edit"
             android:layout_marginRight="22dp"/>
 
         <ImageView
-            android:layout_width="24dp"
+            android:id="@+id/close_payment_mode"
+            android:layout_width="22dp"
             android:layout_height="24dp"
             android:layout_marginRight="12dp"
             android:src="@drawable/ic_close"
