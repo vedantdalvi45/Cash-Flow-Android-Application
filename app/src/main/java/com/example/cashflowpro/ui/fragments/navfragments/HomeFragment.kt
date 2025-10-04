@@ -57,7 +57,14 @@ class HomeFragment : Fragment() {
                         val transactionCalendar = Calendar.getInstance().apply { time = it.time }
                         transactionCalendar.get(Calendar.MONTH) == currentMonth && transactionCalendar.get(Calendar.YEAR) == currentYear
                     }.sumOf { it.amount }
+
+                    val monthlyIncome = transactionList.filter {
+                        val transactionCalendar = Calendar.getInstance().apply { time = it.time }
+                        transactionCalendar.get(Calendar.MONTH) == currentMonth && transactionCalendar.get(Calendar.YEAR) == currentYear
+                        && it.type == "INCOME"
+                    }.sumOf { it.amount }
                     binding.spendingAmmountTv.text = "$monthlySpending"
+                    binding.incomeAmmountTv.text = "$monthlyIncome"
                     // Handle "This Month" option
                 } else if (position == 1) {
                     val transactionList = TransactionStorage.loadTransactions(requireContext())
@@ -68,12 +75,23 @@ class HomeFragment : Fragment() {
                         val transactionCalendar = Calendar.getInstance().apply { time = it.time }
                         transactionCalendar.get(Calendar.YEAR) == currentYear
                     }.sumOf { it.amount }
+
+                    val yearlyIncome = transactionList.filter {
+                        val transactionCalendar = Calendar.getInstance().apply { time = it.time }
+                        transactionCalendar.get(Calendar.YEAR) == currentYear
+                        && it.type == "INCOME"
+                    }.sumOf { it.amount }
+
                     binding.spendingAmmountTv.text = "$yearlySpending"
+                    binding.incomeAmmountTv.text = "$yearlyIncome"
                     // Handle "This Year" option
                 } else {
                     val transactionList = TransactionStorage.loadTransactions(requireContext())
                     val totalSpending = transactionList.sumOf { it.amount }
                     binding.spendingAmmountTv.text = "$totalSpending"
+
+                    val totalIncome = transactionList.filter { it.type == "INCOME" }.sumOf { it.amount }
+                    binding.incomeAmmountTv.text = "$totalIncome"
                     // Handle "All Time" option
                 }
             }
