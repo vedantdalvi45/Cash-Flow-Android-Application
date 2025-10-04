@@ -1,27 +1,52 @@
 package com.example.cashflowpro.adapter
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.cashflowpro.R
 import com.example.cashflowpro.databinding.ListItemTransactionBinding
 import com.example.cashflowpro.data.model.Transaction
+import com.example.cashflowpro.util.CategoryStorage
+import com.example.cashflowpro.util.PaymentModeStorage
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class TransactionAdapter() :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
-    private val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val formatter = SimpleDateFormat("hh:mma    dd MMM yy", Locale.US)
 
     inner class TransactionViewHolder(private val binding: ListItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(transaction: Transaction) {
             binding.textAmount.text = "₹ ${transaction.amount}"
             binding.textDescription.text = transaction.description
-            binding.textDate.text = dateFormat.format(transaction.date)
-            // binding.iconCategory.setImageResource(...) // Set category icon based on transaction type or category
+            binding.textDate.text = formatter.format(transaction.time).toString()
+
+
+            if (transaction.type == "TRANSFER") {
+                binding.iconCategory.setImageResource(R.drawable.ic_money_transfer)
+                binding.layoutTransaction.setBackgroundColor(Color.parseColor("#23895CF2"))
+            } else {
+                var category = CategoryStorage.loadCategories(itemView.context)
+                    .find { it.id == transaction.categoryId }
+                Glide.with(binding.root.context)
+                    .load(category!!.imageUrl)
+                    .placeholder(R.drawable.icon_category) // A default image while loading
+                    .error(R.drawable.ic_categories) // An image to show if loading fails
+                    .into(binding.iconCategory)
+
+            }
+
+
         }
     }
 
@@ -32,9 +57,9 @@ class TransactionAdapter() :
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) =
-        holder.bind(transactionList[position])
+        holder.bind(asyncListDiffer.currentList[position])
 
-    override fun getItemCount() = transactionList.size
+    override fun getItemCount() = asyncListDiffer.currentList.size
 
     //AsyncListDiffer Implementation
     private val differCallback = object : DiffUtil.ItemCallback<Transaction>() {
@@ -53,12 +78,8 @@ class TransactionAdapter() :
         }
     }
 
-    private val asyncListDiffer = AsyncListDiffer(this, differCallback)
-    var transactionList: MutableList<Transaction>
-        get() =asyncListDiffer.currentList
-        set(value) = asyncListDiffer.submitList(value)
-
-    fun submitList(list : MutableList<Transaction>){
+    val asyncListDiffer = AsyncListDiffer(this, differCallback)
+    fun submitList(list: List<Transaction>) {
         asyncListDiffer.submitList(list)
     }
 }
