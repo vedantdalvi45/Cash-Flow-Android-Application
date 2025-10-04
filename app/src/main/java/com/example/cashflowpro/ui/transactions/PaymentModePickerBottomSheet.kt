@@ -23,7 +23,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.concurrent.Executor
 import kotlin.getValue
 
-class PaymentModePickerBottomSheet : BottomSheetDialogFragment() {
+class PaymentModePickerBottomSheet(
+    private val onPaymentModeSelected: (PaymentMode) -> Unit
+) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentPaymentModePickerBinding? = null
     private val binding get() = _binding!!
@@ -69,6 +71,8 @@ class PaymentModePickerBottomSheet : BottomSheetDialogFragment() {
 
         viewModel.fetchPaymentModes()
 
+        setupCategorySelection()
+
         setupBiometrics()
 
         binding.balanceToggle.setOnCheckedChangeListener { _, isChecked ->
@@ -79,12 +83,27 @@ class PaymentModePickerBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
+        binding.closePaymentMode.setOnClickListener { dismiss() }
+//        binding.editPaymentMode.setOnClickListener {}
         return binding.root
+
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupCategorySelection() {
+        paymentModeAdapterForBank.onItemClick = { selectedPaymentMode ->
+            onPaymentModeSelected(selectedPaymentMode)
+            dismiss()
+        }
+        paymentModeAdapterForCash.onItemClick = { selectedPaymentMode ->
+            onPaymentModeSelected(selectedPaymentMode)
+            dismiss()
+        }
     }
 
     private fun setupRecyclerViewForBank() {
