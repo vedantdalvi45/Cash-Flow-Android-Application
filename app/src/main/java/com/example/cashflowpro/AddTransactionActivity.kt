@@ -192,16 +192,7 @@ class AddTransactionActivity : AppCompatActivity() {
             )
             sheet.show(supportFragmentManager, "PaymentModePicker")
         }
-        // The 'To' layout (layoutPaymentMode) should also open a picker.
-        binding.layoutPaymentMode.setOnClickListener {
-            val sheet = PaymentModePickerBottomSheet(
-                onPaymentModeSelected = { selectedPaymentMode ->
-                    binding.textViewPaymentModeValue.text = selectedPaymentMode.modeName
-                    toPaymentMode = selectedPaymentMode
-                }
-            )
-            sheet.show(supportFragmentManager, "PaymentModePicker")
-        }
+//
         type = "TRANSFER"
     }
 
@@ -220,13 +211,13 @@ class AddTransactionActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please select a payment mode", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Log.d(TAG, "saveTransaction type: ${this.type}")
-            Log.d(TAG, "saveTransaction amount: ${binding.editTextAmount.text.toString()}")
-            Log.d(TAG, "saveTransaction description: ${binding.editTextNote.text.toString()}")
-            Log.d(TAG, "saveTransaction time: ${calendar.time}")
-            Log.d(TAG, "saveTransaction categoryId: ${category?.id}")
-            Log.d(TAG, "saveTransaction fromPaymentModeId: ${fromPaymentMode?.id}")
-            Log.d(TAG, "saveTransaction toPaymentModeId: ${toPaymentMode?.id}")
+//            Log.d(TAG, "saveTransaction type: ${this.type}")
+//            Log.d(TAG, "saveTransaction amount: ${binding.editTextAmount.text.toString()}")
+//            Log.d(TAG, "saveTransaction description: ${binding.editTextNote.text.toString()}")
+//            Log.d(TAG, "saveTransaction time: ${calendar.time}")
+//            Log.d(TAG, "saveTransaction categoryId: ${category?.id}")
+//            Log.d(TAG, "saveTransaction fromPaymentModeId: ${fromPaymentMode?.id}")
+//            Log.d(TAG, "saveTransaction toPaymentModeId: ${toPaymentMode?.id}")
             val transaction = Transaction(
                 type = this.type.toString(),
                 amount = binding.editTextAmount.text.toString().toBigDecimal(),
@@ -236,20 +227,12 @@ class AddTransactionActivity : AppCompatActivity() {
                 fromPaymentModeId = fromPaymentMode?.id,
                 toPaymentModeId = toPaymentMode?.id,
             )
-            Toast.makeText(this@AddTransactionActivity, "Transaction saved", Toast.LENGTH_SHORT)
-                .show()
-            Log.d(TAG, "saveTransaction: $transaction")
 
             val transactionList =
                 TransactionStorage.loadTransactions(this@AddTransactionActivity).toMutableList()
             transactionList.add(transaction)
             TransactionStorage.clearTransactions(this@AddTransactionActivity) // This would delete all previous transactions
             TransactionStorage.saveTransactions(this@AddTransactionActivity, transactionList)
-
-            var list : MutableList<Transaction> = ArrayList()
-            list.add(transaction)
-
-            Log.d(TAG, "saveTransaction: $list")
 
             finish()
         }
