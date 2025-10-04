@@ -11,9 +11,9 @@ import com.example.cashflowpro.R
 import com.example.cashflowpro.data.model.Category
 import com.example.cashflowpro.databinding.ItemCategoryGridBinding
 
-class CategoryAdapterForTransaction(
-    private val onItemClick: (Category) -> Unit
-) : RecyclerView.Adapter<CategoryAdapterForTransaction.CategoryViewHolder>() {
+class CategoryAdapterForTransaction: RecyclerView.Adapter<CategoryAdapterForTransaction.CategoryViewHolder>() {
+
+    var onItemClick: ((Category) -> Unit)? = null
 
     inner class CategoryViewHolder(private val binder: ItemCategoryGridBinding) : RecyclerView.ViewHolder(binder.root) {
         fun bind(category: Category) {
@@ -23,7 +23,10 @@ class CategoryAdapterForTransaction(
                 .placeholder(R.drawable.icon_category) // A default image while loading
                 .error(R.drawable.icon_category) // An image to show if loading fails
                 .into(binder.imgIcon)
-            itemView.setOnClickListener { onItemClick(category) }
+
+            binder.root.setOnClickListener {
+                onItemClick?.invoke(category)
+            }
         }
     }
 
