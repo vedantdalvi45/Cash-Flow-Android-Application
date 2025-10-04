@@ -177,7 +177,7 @@
                         android:id="@+id/text_view_category_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="category"
+                        android:text="Category"
                         android:textColor="?attr/colorSurface"
                         android:textAppearance="?attr/textAppearanceCaption" />
 
@@ -362,12 +362,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_attachment"
+        android:id="@+id/fab_save_transaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="add attachment"
+        android:contentDescription="save transaction"
         android:src="@drawable/save" />
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -379,6 +379,7 @@
         app:layout_anchor="@+id/appBarLayout"
         app:layout_anchorGravity="center"
         app:navigationIcon="@drawable/ic_back_arrow"
-        app:title="Categories" />
+        app:title="Categories"
+        android:paddingTop="8dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

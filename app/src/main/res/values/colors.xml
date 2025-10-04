@@ -34,6 +34,10 @@
     <color name="dark_error">#FFB4AB</color>
     <color name="dark_onError">#690005</color>
 
+    <color name="date_picker_header_bg">#004D40</color>
+    <color name="date_picker_header_text">#FFFFFF</color>
+    <color name="date_picker_dialog_bg">#F0F5F5</color>
+    <color name="date_picker_accent">#00796B</color>
 
 
 </resources>
