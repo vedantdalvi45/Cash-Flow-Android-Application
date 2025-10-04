@@ -42,12 +42,15 @@ class TransactionAdapter(private val context: Context) :
                 binding.iconCategory.setImageResource(R.drawable.ic_money_transfer)
                 binding.layoutTransaction.setBackgroundColor(Color.parseColor("#23895CF2"))
             } else {
-
                 Glide.with(binding.root.context)
                     .load(category!!.imageUrl)
                     .placeholder(R.drawable.icon_category) // A default image while loading
                     .error(R.drawable.ic_categories) // An image to show if loading fails
                     .into(binding.iconCategory)
+
+                if (transaction.type == "INCOME") {
+                    binding.layoutTransaction.setBackgroundColor(Color.parseColor("#317DF47F"))
+                }
 
             }
 
