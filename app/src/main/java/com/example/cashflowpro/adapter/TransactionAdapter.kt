@@ -1,5 +1,6 @@
 package com.example.cashflowpro.adapter
 
+import android.content.Context
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -14,21 +15,26 @@ import com.example.cashflowpro.databinding.ListItemTransactionBinding
 import com.example.cashflowpro.data.model.Transaction
 import com.example.cashflowpro.util.CategoryStorage
 import com.example.cashflowpro.util.PaymentModeStorage
+import com.example.cashflowpro.util.TransactionStorage
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class TransactionAdapter() :
+class TransactionAdapter(private val context: Context) :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
     val formatter = SimpleDateFormat("hh:mma    dd MMM yy", Locale.US)
+
 
     inner class TransactionViewHolder(private val binding: ListItemTransactionBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(transaction: Transaction) {
+
+            var category = CategoryStorage.loadCategories(itemView.context)
+                .find { it.id == transaction.categoryId }
             binding.textAmount.text = "₹ ${transaction.amount}"
-            binding.textDescription.text = transaction.description
+            binding.textDescription.text = category?.name
             binding.textDate.text = formatter.format(transaction.time).toString()
 
 
@@ -36,8 +42,7 @@ class TransactionAdapter() :
                 binding.iconCategory.setImageResource(R.drawable.ic_money_transfer)
                 binding.layoutTransaction.setBackgroundColor(Color.parseColor("#23895CF2"))
             } else {
-                var category = CategoryStorage.loadCategories(itemView.context)
-                    .find { it.id == transaction.categoryId }
+
                 Glide.with(binding.root.context)
                     .load(category!!.imageUrl)
                     .placeholder(R.drawable.icon_category) // A default image while loading
@@ -79,7 +84,7 @@ class TransactionAdapter() :
     }
 
     val asyncListDiffer = AsyncListDiffer(this, differCallback)
-    fun submitList(list: List<Transaction>) {
-        asyncListDiffer.submitList(list)
+    fun submitList() {
+        asyncListDiffer.submitList(TransactionStorage.loadTransactions(context))
     }
 }
