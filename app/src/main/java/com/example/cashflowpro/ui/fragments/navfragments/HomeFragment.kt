@@ -14,6 +14,7 @@ import com.example.cashflowpro.R
 import com.example.cashflowpro.adapter.TransactionAdapter
 import com.example.cashflowpro.databinding.FragmentHomeBinding
 import com.example.cashflowpro.util.TransactionStorage
+import java.util.Calendar
 
 
 class HomeFragment : Fragment() {
@@ -40,12 +41,41 @@ class HomeFragment : Fragment() {
             }
         }
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.optionsSpinner.adapter = adapter
 
         binding.optionsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 binding.monthSelectorText.text = list[position]
+                if (position == 0) {
+                    val transactionList = TransactionStorage.loadTransactions(requireContext())
+                    val calendar = Calendar.getInstance()
+                    val currentMonth = calendar.get(Calendar.MONTH)
+                    val currentYear = calendar.get(Calendar.YEAR)
+
+                    val monthlySpending = transactionList.filter {
+                        val transactionCalendar = Calendar.getInstance().apply { time = it.time }
+                        transactionCalendar.get(Calendar.MONTH) == currentMonth && transactionCalendar.get(Calendar.YEAR) == currentYear
+                    }.sumOf { it.amount }
+                    binding.spendingAmmountTv.text = "$monthlySpending"
+                    // Handle "This Month" option
+                } else if (position == 1) {
+                    val transactionList = TransactionStorage.loadTransactions(requireContext())
+                    val calendar = Calendar.getInstance()
+                    val currentYear = calendar.get(Calendar.YEAR)
+
+                    val yearlySpending = transactionList.filter {
+                        val transactionCalendar = Calendar.getInstance().apply { time = it.time }
+                        transactionCalendar.get(Calendar.YEAR) == currentYear
+                    }.sumOf { it.amount }
+                    binding.spendingAmmountTv.text = "$yearlySpending"
+                    // Handle "This Year" option
+                } else {
+                    val transactionList = TransactionStorage.loadTransactions(requireContext())
+                    val totalSpending = transactionList.sumOf { it.amount }
+                    binding.spendingAmmountTv.text = "$totalSpending"
+                    // Handle "All Time" option
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -65,15 +95,19 @@ class HomeFragment : Fragment() {
     private fun recentTransactions() {
 
         binding.transactionsRecyclerView.apply {
-            transactionAdapter = TransactionAdapter()
+            transactionAdapter = TransactionAdapter(requireContext())
             adapter =  transactionAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
         Log.d(TAG, "recentTransactions: ${TransactionStorage.loadTransactions(requireContext())}")
         var list = TransactionStorage.loadTransactions(requireContext()).toMutableList()
-        transactionAdapter.submitList(list)
+        transactionAdapter.submitList()
     }
 
+    override fun onResume() {
+        super.onResume()
+        transactionAdapter.submitList()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
