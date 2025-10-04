@@ -1,7 +1,6 @@
 package com.example.cashflowpro
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -19,8 +18,8 @@ class AddTransactionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddTransactionBinding
 
     private val calendar = Calendar.getInstance()
-    private val dateFormat = SimpleDateFormat("dd MMM yyyy")
-    private val timeFormat = SimpleDateFormat("hh:mm a")
+    private val dateFormat = SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+    private val timeFormat = SimpleDateFormat("hh:mm a", java.util.Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,89 +34,108 @@ class AddTransactionActivity : AppCompatActivity() {
 
         manipulateCalender()
         manipulateTransactionTabs()
-        binding.layoutCategory.setOnClickListener {
-            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "EXPENSE" })
-            sheet.show(supportFragmentManager, "CategoryPicker")
-        }
+        setupClickListeners()
+
+        // Set initial state for Expense
+        binding.toggleTransactionType.check(R.id.button_expense)
+        setupForExpense()
+    }
+
+    private fun setupClickListeners() {
         binding.layoutPaymentMode.setOnClickListener {
             val sheet = PaymentModePickerBottomSheet()
             sheet.show(supportFragmentManager, "PaymentModePicker")
         }
     }
-    private fun manipulateCalender(){
+
+    private fun manipulateCalender() {
         binding.textViewDate.text = dateFormat.format(calendar.time)
         binding.textViewTime.text = timeFormat.format(calendar.time)
 
         binding.calenderSelector.setOnClickListener {
+            val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                calendar.set(year, month, dayOfMonth)
+                binding.textViewDate.text = dateFormat.format(calendar.time)
+            }
             val datePickerDialog = DatePickerDialog(
                 this,
-                { _, year, month, dayOfMonth ->
-                    calendar.set(year, month, dayOfMonth)
-                    binding.textViewTime.text = dateFormat.format(calendar.time)
-                },
+                R.style.CustomDatePickerDialog,
+                dateSetListener,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
-            datePickerDialog.setOnDateSetListener { _, year, month, dayOfMonth ->
-                calendar.set(year, month, dayOfMonth)
-                binding.textViewDate.text = dateFormat.format(calendar.time)
-            }
             datePickerDialog.show()
         }
+
         binding.timeSelector.setOnClickListener {
-            val timePickerDialog = TimePickerDialog(
+            val timeSetListener = android.app.TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                calendar.set(Calendar.MINUTE, minute)
+                binding.textViewTime.text = timeFormat.format(calendar.time)
+            }
+            android.app.TimePickerDialog(
                 this,
-                { _, hourOfDay, minute ->
-                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                    calendar.set(Calendar.MINUTE, minute)
-                    binding.textViewTime.text = timeFormat.format(calendar.time)
-                },
+                R.style.CustomDatePickerDialog,
+                timeSetListener,
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
                 false
-            )
-            timePickerDialog.show()
+            ).show()
         }
     }
-    private fun manipulateTransactionTabs(){
+
+    private fun manipulateTransactionTabs() {
         binding.toggleTransactionType.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
-                    R.id.button_expense -> { /* Handle Expense selection */
-                        binding.textViewCategoryLabel.text = "Category"
-                        binding.textViewCategoryValue.text = "Others"
-                        binding.categoryIcon.setImageResource(R.drawable.icon_category)
-                        binding.paymentModeLabel.text = "Payment Mode"
-                        binding.textViewPaymentModeValue.text = "Cash"
-                        binding.layoutCategory.setOnClickListener {
-                            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "EXPENSE" })
-                            sheet.show(supportFragmentManager, "CategoryPicker")
-                        }
-                    }
-                    R.id.button_income -> { /* Handle Income selection */
-                        binding.textViewCategoryLabel.text = "Category"
-                        binding.textViewCategoryValue.text = "Others"
-                        binding.categoryIcon.setImageResource(R.drawable.icon_category)
-                        binding.paymentModeLabel.text = "Payment Mode"
-                        binding.textViewPaymentModeValue.text = "Cash"
-                        binding.layoutCategory.setOnClickListener {
-                            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "INCOME" })
-                            sheet.show(supportFragmentManager, "CategoryPicker")
-                        }
-                    }
-                    R.id.button_transfer -> { /* Handle Transfer selection */
-                        binding.textViewCategoryLabel.text = "From"
-                        binding.textViewCategoryValue.text = "Cash"
-                        binding.categoryIcon.setImageResource(R.drawable.money)
-                        binding.paymentModeLabel.text = "To"
-                        binding.textViewPaymentModeValue.text = "Cash"
-                        binding.layoutCategory.setOnClickListener {
-
-                        }
-                    }
+                    R.id.button_expense -> setupForExpense()
+                    R.id.button_income -> setupForIncome()
+                    R.id.button_transfer -> setupForTransfer()
                 }
             }
+        }
+    }
+
+    private fun setupForExpense() {
+        binding.textViewCategoryLabel.text = "Category"
+        binding.textViewCategoryValue.text = "Others"
+        binding.categoryIcon.setImageResource(R.drawable.ic_categories)
+        binding.paymentModeLabel.text = "Payment Mode"
+        binding.textViewPaymentModeValue.text = "Cash"
+        binding.layoutCategory.setOnClickListener {
+            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "EXPENSE" })
+            sheet.show(supportFragmentManager, "CategoryPicker")
+        }
+    }
+
+    private fun setupForIncome() {
+        binding.textViewCategoryLabel.text = "Category"
+        binding.textViewCategoryValue.text = "Others"
+        binding.categoryIcon.setImageResource(R.drawable.ic_categories)
+        binding.paymentModeLabel.text = "Payment Mode"
+        binding.textViewPaymentModeValue.text = "Cash"
+        binding.layoutCategory.setOnClickListener {
+            val sheet = CategoryPickerBottomSheet(CategoryStorage.loadCategories(this@AddTransactionActivity).filter { it.categoryType == "INCOME" })
+            sheet.show(supportFragmentManager, "CategoryPicker")
+        }
+    }
+
+    private fun setupForTransfer() {
+        binding.textViewCategoryLabel.text = "From"
+        binding.textViewCategoryValue.text = "Cash"
+        binding.categoryIcon.setImageResource(R.drawable.money)
+        binding.paymentModeLabel.text = "To"
+        binding.textViewPaymentModeValue.text = "Cash"
+        binding.layoutCategory.setOnClickListener {
+            // Open a bottom sheet to select the 'From' account, e.g., PaymentModePickerBottomSheet
+            val sheet = PaymentModePickerBottomSheet()
+            sheet.show(supportFragmentManager, "PaymentModePicker")
+        }
+        // The 'To' layout (layoutPaymentMode) should also open a picker.
+        binding.layoutPaymentMode.setOnClickListener {
+            val sheet = PaymentModePickerBottomSheet()
+            sheet.show(supportFragmentManager, "PaymentModePicker")
         }
     }
 }
