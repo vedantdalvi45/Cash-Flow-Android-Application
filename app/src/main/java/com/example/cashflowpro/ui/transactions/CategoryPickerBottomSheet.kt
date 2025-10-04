@@ -20,7 +20,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 const val TAG = "CategoryPickerBottomSheet"
 
-class CategoryPickerBottomSheet(val categories: List<Category>) : BottomSheetDialogFragment() {
+class CategoryPickerBottomSheet(
+    val categories: List<Category>,
+    val onCategorySelected: (Category) -> Unit
+) : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetCategoryPickerBinding? = null
     private val binding get() = _binding!!
@@ -41,6 +44,7 @@ class CategoryPickerBottomSheet(val categories: List<Category>) : BottomSheetDia
 
         context?.let {
             setupRecyclerView(it)
+            setupCategorySelection()
         }
 
         binding.btnClose.setOnClickListener {
@@ -61,14 +65,17 @@ class CategoryPickerBottomSheet(val categories: List<Category>) : BottomSheetDia
         }
     }
 
-    private fun setupRecyclerView(context: Context) {
-        categoryAdapter = CategoryAdapterForTransaction { selectedCategory ->
-            Log.d(TAG, "Selected category: $selectedCategory")
+    private fun setupCategorySelection() {
+        categoryAdapter.onItemClick = { selectedCategory ->
+            onCategorySelected(selectedCategory)
             dismiss()
         }
+    }
+
+    private fun setupRecyclerView(context: Context) {
+        categoryAdapter = CategoryAdapterForTransaction()
         binding.recyclerViewCategories.adapter = categoryAdapter
         setLayoutManager()
-
         categoryAdapter.submitList(categories)
     }
 
