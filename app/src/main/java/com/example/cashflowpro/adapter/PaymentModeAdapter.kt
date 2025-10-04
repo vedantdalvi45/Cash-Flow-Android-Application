@@ -13,25 +13,32 @@ import com.example.cashflowpro.data.model.Category
 import com.example.cashflowpro.data.model.PaymentMode
 import com.example.cashflowpro.databinding.ItemAccountBinding
 
-class PaymentModeAdapter() :
-    RecyclerView.Adapter<PaymentModeAdapter.AccountViewHolder>() {
+class PaymentModeAdapter : RecyclerView.Adapter<PaymentModeAdapter.AccountViewHolder>() {
 
-//    interface OnItemClickListener {
-//        fun onBalanceClick(paymentMode: PaymentMode, balance: TextView)
-//    }
-//
-//    var onItemClickListener: OnItemClickListener? = null
-
-    class AccountViewHolder(val binder: ItemAccountBinding) : RecyclerView.ViewHolder(binder.root) {
+    inner class AccountViewHolder(val binder: ItemAccountBinding) :
+        RecyclerView.ViewHolder(binder.root) {
         fun bind(paymentMode: PaymentMode) {
             binder.tvAccountName.text = paymentMode.modeName
-            binder.tvAccountBalance.text = if (paymentMode.balance == -1.0) "*****" else "₹${paymentMode.balance}"
+            binder.tvAccountBalance.text =
+                if (paymentMode.balance == -1.0) "*****" else "₹${paymentMode.balance}"
+
+            binder.paymentModeContainer.setOnClickListener {
+                onItemClick?.invoke(paymentMode)
+            }
         }
     }
+    var onItemClick: ((PaymentMode) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val binding = ItemAccountBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AccountViewHolder(binding)
+        val holder = AccountViewHolder(binding)
+        holder.itemView.setOnClickListener {
+            val position = holder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                onItemClick?.invoke(asyncListDiffer.currentList[position])
+            }
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
@@ -54,6 +61,5 @@ class PaymentModeAdapter() :
 
     fun submitList(newList: List<PaymentMode>) {
         asyncListDiffer.submitList(newList)
-        notifyDataSetChanged()
     }
 }
